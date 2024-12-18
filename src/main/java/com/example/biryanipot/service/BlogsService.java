@@ -20,4 +20,6 @@ public interface BlogsService {
 
     // Method to update an existing blog
     Blogs updateBlog(Long blogId, Blogs blog);
-}
+    
+    List<Blogs> getBlogsByCategoryId(Long categoryId);
+   }

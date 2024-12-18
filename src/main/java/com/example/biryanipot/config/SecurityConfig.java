@@ -2,6 +2,7 @@ package com.example.biryanipot.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -28,7 +29,17 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
+                // Allow public GET requests for Blogs and Comments
+                .requestMatchers("/api/comments", "/api/comments/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/blogs", "/api/blogs/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/blogs/category/{categoryId}").permitAll() // Allow unauthenticated access
                 .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                // Secure POST, PUT, DELETE requests for /api/blogs/**
+                .requestMatchers(HttpMethod.POST, "/api/blogs/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/blogs/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/blogs/**").authenticated()
+                
+                // Any other requests require authentication
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

@@ -38,6 +38,11 @@ public class BlogsServiceImpl implements BlogsService {
     public void deleteBlog(Long blogId) {
         blogsRepository.deleteById(blogId);
     }
+    
+    @Override
+    public List<Blogs> getBlogsByCategoryId(Long categoryId) {
+        return blogsRepository.findByCategoryCategoryId(categoryId);
+    }
 
     @Override
     public Blogs updateBlog(Long blogId, Blogs blog) {
